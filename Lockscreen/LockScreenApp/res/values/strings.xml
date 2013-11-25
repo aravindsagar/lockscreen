@@ -9,8 +9,8 @@
 
     <color name="mycolor1">#F5DC49</color>
 
-    <string name="title_activity_settings">Settings</string>
-    <string name="action_settings">Settings</string>
+    <string name="title_activity_settings">VC Settings</string>
+    <string name="action_settings">VC Settings</string>
     <string name="hello_world">Hello world!</string>
 
 </resources>
