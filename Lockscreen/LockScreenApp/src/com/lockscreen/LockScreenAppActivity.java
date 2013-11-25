@@ -47,6 +47,8 @@ public class LockScreenAppActivity extends Activity {
 	public static final String LOCKED = "com.lockscreen.locked";
 	public static final String LAUNCHER = "com.lockscreen.launcher";
 	
+	private boolean locked = false;
+	
 	private LayoutParams layoutParams;
 
 	@Override
@@ -72,14 +74,15 @@ public class LockScreenAppActivity extends Activity {
 		setContentView(R.layout.main);
 		droid = (ImageView) findViewById(R.id.droid);
 
-		SharedPreferences settings = getSharedPreferences(PREF_FILE,0);
+		final SharedPreferences settings = getSharedPreferences(PREF_FILE,0);
 		String launcher = settings.getString(LAUNCHER, "launcher");
+		locked = settings.getBoolean(LOCKED, false);
 		
 		if (getIntent() != null && getIntent().hasExtra("kill")
 				&& getIntent().getExtras().getInt("kill") == 1) {
 			finish();
 		}
-		if (getIntent() == null || !getIntent().getBooleanExtra(LOCKED, false)) {
+		if (!locked) {
 			PackageManager pm = getPackageManager();
 			Intent i = new Intent("android.intent.action.MAIN");
 			i.addCategory("android.intent.category.HOME");
@@ -109,6 +112,9 @@ public class LockScreenAppActivity extends Activity {
 			// initialize receiver
 
 			startService(new Intent(this, MyService.class));
+			
+			lock(this, true);
+			
 			StateListener phoneStateListener = new StateListener();
 			TelephonyManager telephonyManager = (TelephonyManager) getSystemService(TELEPHONY_SERVICE);
 			telephonyManager.listen(phoneStateListener,
@@ -187,6 +193,7 @@ public class LockScreenAppActivity extends Activity {
 						if (((x_cord - home_x) <= (windowwidth / 24) * 5 && (home_x - x_cord) <= (windowwidth / 24) * 4)
 								&& ((home_y - y_cord) <= (windowheight / 32) * 5)) {
 							System.out.println("home overlapps");
+							lock(v.getContext(), false);
 							System.out.println("homeee" + home_x + "  "
 									+ (int) event.getRawX() + "  " + x_cord
 									+ " " + droidpos[0]);
@@ -393,6 +400,13 @@ public class LockScreenAppActivity extends Activity {
         this.startActivity(closeRecents);
     }
 
+    public static void lock(Context c, boolean set) {
+		SharedPreferences settings = c.getSharedPreferences(PREF_FILE,0);
+		SharedPreferences.Editor editor = settings.edit();
+		editor.putBoolean(LOCKED,set);
+		editor.commit();
+    }
+    
     private Handler windowCloseHandler = new Handler();
     private Runnable windowCloserRunnable = new Runnable() {
         @Override

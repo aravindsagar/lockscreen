@@ -3,6 +3,7 @@ package receiver;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 
 import com.lockscreen.LockScreenAppActivity;
 
@@ -20,6 +21,7 @@ public class lockScreenReeiver extends BroadcastReceiver {
 
 			wasScreenOn = false;
 			Intent intent11 = new Intent(context, LockScreenAppActivity.class);
+			LockScreenAppActivity.lock(context, true);
 			intent11.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 			intent11.putExtra(LockScreenAppActivity.LOCKED, true);
 
@@ -33,7 +35,7 @@ public class lockScreenReeiver extends BroadcastReceiver {
 			Intent intent11 = new Intent(context, LockScreenAppActivity.class);
 			intent11.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 			intent11.putExtra(LockScreenAppActivity.LOCKED, true);
-
+			LockScreenAppActivity.lock(context, true);
 			context.startActivity(intent11);
 			// context.startActivity(intent11);
 			// Toast.makeText(context, "" + "start activity",
