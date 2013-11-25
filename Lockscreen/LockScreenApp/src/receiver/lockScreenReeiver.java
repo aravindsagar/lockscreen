@@ -36,7 +36,7 @@ public class lockScreenReeiver extends BroadcastReceiver {
 			intent11.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 			intent11.putExtra(LockScreenAppActivity.LOCKED, true);
 			LockScreenAppActivity.lock(context, true);
-			context.startActivity(intent11);
+			//context.startActivity(intent11);
 			// context.startActivity(intent11);
 			// Toast.makeText(context, "" + "start activity",
 			// Toast.LENGTH_SHORT).show();
@@ -51,7 +51,7 @@ public class lockScreenReeiver extends BroadcastReceiver {
 			 */
 			Intent intent11 = new Intent(context, LockScreenAppActivity.class);
 
-			intent11.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+			//intent11.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 			intent11.putExtra(LockScreenAppActivity.LOCKED, true);
 			context.startActivity(intent11);
 

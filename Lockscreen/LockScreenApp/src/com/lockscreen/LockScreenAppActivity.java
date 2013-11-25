@@ -83,25 +83,37 @@ public class LockScreenAppActivity extends Activity {
 			finish();
 		}
 		if (!locked) {
-			PackageManager pm = getPackageManager();
-			Intent i = new Intent("android.intent.action.MAIN");
-			i.addCategory("android.intent.category.HOME");
-			List<ResolveInfo> lst = pm.queryIntentActivities(i, 0);
-			if (!lst.isEmpty()) {
-				for (ResolveInfo l : lst) {
-					if (l.activityInfo.packageName.contains(launcher)) {
-						ActivityInfo activity=l.activityInfo;
-						ComponentName name=new ComponentName(activity.applicationInfo.packageName,
-						                                     activity.name);
-						Intent intent=new Intent(Intent.ACTION_MAIN);
-		
-						intent.addCategory(Intent.CATEGORY_LAUNCHER);
-						intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK |
-						            Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED);
-						intent.setComponent(name);
-		
-						startActivity(intent);
-						finish();
+			ActivityManager mngr = (ActivityManager) getSystemService( ACTIVITY_SERVICE );
+
+			List<ActivityManager.RunningTaskInfo> taskList = mngr.getRunningTasks(2);
+			int sizeStack =  mngr.getRunningTasks(1).size();
+			for(int i = 0;i < sizeStack;i++){
+
+			    ComponentName cn = mngr.getRunningTasks(2).get(i).topActivity;
+			    Log.d("com.lockscreen", cn.getClassName());
+			}
+			Log.d("com.lockscreen", String.format("Num activities : %d", taskList.get(1).numActivities));
+			if(taskList.size() >= 1 && !taskList.get(1).topActivity.getClassName().contains(launcher)) {
+				PackageManager pm = getPackageManager();
+				Intent i = new Intent("android.intent.action.MAIN");
+				i.addCategory("android.intent.category.HOME");
+				List<ResolveInfo> lst = pm.queryIntentActivities(i, 0);
+				if (!lst.isEmpty()) {
+					for (ResolveInfo l : lst) {
+						if (l.activityInfo.packageName.contains(launcher)) {
+							ActivityInfo activity=l.activityInfo;
+							ComponentName name=new ComponentName(activity.applicationInfo.packageName,
+							                                     activity.name);
+							Intent intent=new Intent(Intent.ACTION_MAIN);
+			
+							intent.addCategory(Intent.CATEGORY_LAUNCHER);
+							intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK |
+							            Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED);
+							intent.setComponent(name);
+			
+							startActivity(intent);
+							finish();
+						}
 					}
 				}
 			}
@@ -112,8 +124,6 @@ public class LockScreenAppActivity extends Activity {
 			// initialize receiver
 
 			startService(new Intent(this, MyService.class));
-			
-			lock(this, true);
 			
 			StateListener phoneStateListener = new StateListener();
 			TelephonyManager telephonyManager = (TelephonyManager) getSystemService(TELEPHONY_SERVICE);
@@ -316,6 +326,10 @@ public class LockScreenAppActivity extends Activity {
 	protected void onPause() {
 		super.onPause();
 
+		
+		ActivityManager am = (ActivityManager)getApplicationContext().getSystemService(Context.ACTIVITY_SERVICE);
+        //am.moveTaskToFront(getTaskId(), ActivityManager.MOVE_TASK_WITH_HOME);
+		am.moveTaskToFront(getTaskId(), 0);
 		// Don't hang around.
 		// finish();
 	}
@@ -392,14 +406,6 @@ public class LockScreenAppActivity extends Activity {
         }
     }
 
-    private void toggleRecents() {
-        Intent closeRecents = new Intent("com.android.systemui.recent.action.TOGGLE_RECENTS");
-        closeRecents.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);
-        ComponentName recents = new ComponentName("com.android.systemui", "com.android.systemui.recent.RecentsActivity");
-        closeRecents.setComponent(recents);
-        this.startActivity(closeRecents);
-    }
-
     public static void lock(Context c, boolean set) {
 		SharedPreferences settings = c.getSharedPreferences(PREF_FILE,0);
 		SharedPreferences.Editor editor = settings.edit();
@@ -415,8 +421,9 @@ public class LockScreenAppActivity extends Activity {
             ComponentName cn = am.getRunningTasks(1).get(0).topActivity;
 
             Log.d("com.lockscreen", String.format("component: '%s'",cn.getClassName()));
-            if (cn != null && cn.getClassName().equals("com.android.systemui.recent.RecentsActivity")) {
-            	am.moveTaskToFront(getTaskId(), ActivityManager.MOVE_TASK_WITH_HOME);
+            // "com.android.systemui.recent.RecentsActivity"
+            if (cn != null && !cn.getClassName().equals("com.lockscreen.LockScreenAppActivity")) {
+            	am.moveTaskToFront(getTaskId(), 0);
             }
         }
     };
