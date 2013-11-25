@@ -53,7 +53,7 @@ public class lockScreenReeiver extends BroadcastReceiver {
 
 			//intent11.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 			intent11.putExtra(LockScreenAppActivity.LOCKED, true);
-			context.startActivity(intent11);
+			//context.startActivity(intent11);
 
 			// Intent intent = new Intent(context, LockPage.class);
 			// context.startActivity(intent);
