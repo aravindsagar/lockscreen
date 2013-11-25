@@ -78,10 +78,11 @@ public class Settings extends Activity {
 			
 		});
 		
-		Intent intent = new Intent(this,LockScreenAppActivity.class);
-		intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-		intent.putExtra("kill", true);
-		startActivity(intent);
+		//Intent intent = new Intent(this,LockScreenAppActivity.class);
+		//intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+		//intent.putExtra("kill", true);
+		//startActivity(intent);
+		startService(new Intent(this, MyService.class));
 
 	}
 	
