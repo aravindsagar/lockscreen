@@ -81,9 +81,8 @@ public class LockScreenAppActivity extends Activity {
 				ComponentName cn = mngr.getRunningTasks(2).get(i).topActivity;
 				Log.d("com.lockscreen", cn.getClassName());
 			}
-			Log.d("com.lockscreen", String.format("Num activities : %d",
-					taskList.get(1).numActivities));
-			if (taskList.size() >= 1
+			//Log.d("com.lockscreen", String.format("Num activities : %d",taskList.get(1).numActivities));
+			if (taskList.size() > 1
 					&& !taskList.get(1).topActivity.getClassName().contains(
 							launcher)) {
 				PackageManager pm = getPackageManager();
