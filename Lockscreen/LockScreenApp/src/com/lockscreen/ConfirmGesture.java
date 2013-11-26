@@ -13,6 +13,7 @@ import android.gesture.Prediction;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
@@ -40,29 +41,29 @@ public class ConfirmGesture extends Activity {
 		txtSens = (TextView) findViewById(R.id.txtThreshold);
 		threshold = (float) 1.0;
 		txtSens.setText(String.format("Sensitivity (%.2f):", threshold));
-		
+
 		sensitivity.setOnSeekBarChangeListener(new OnSeekBarChangeListener() {
 
 			@Override
-			public void onProgressChanged(SeekBar bar, int progress, boolean byUser) {
-				threshold = (float) ((float)progress / 20.0);
+			public void onProgressChanged(SeekBar bar, int progress,
+					boolean byUser) {
+				threshold = (float) ((float) progress / 20.0);
 				txtSens.setText(String.format("Sensitivity (%.2f):", threshold));
 			}
 
 			@Override
 			public void onStartTrackingTouch(SeekBar arg0) {
 				// TODO Auto-generated method stub
-				
+
 			}
 
 			@Override
 			public void onStopTrackingTouch(SeekBar arg0) {
 				// TODO Auto-generated method stub
-				
+
 			}
-			
+
 		});
-		
 
 		GestureOverlayView overlay = (GestureOverlayView) findViewById(R.id.gestures_recorder);
 		overlay.setGestureColor(Color.TRANSPARENT);
@@ -143,21 +144,36 @@ public class ConfirmGesture extends Activity {
 				GestureLibrary store = GestureLibraries.fromFile(mStoreFile);
 				store.load();
 
-
 				ArrayList<Prediction> predictions = store.recognize(mGesture);
 				Log.d("com.lockscreen",
 						String.format("size:%d", predictions.size()));
-				for(Prediction predict: predictions)
+				for (Prediction predict : predictions)
 					if (predict.name.equals("newgest"))
-						Toast.makeText(overlay.getContext(), String.format("Gesture recognized with threshold %f", predict.score), Toast.LENGTH_LONG).show();
+						Toast.makeText(
+								overlay.getContext(),
+								String.format(
+										"Gesture recognized with threshold %f",
+										predict.score), Toast.LENGTH_LONG)
+								.show();
 			}
-			
+
 			confirmButton.setEnabled(true);
 		}
 
 		public void onGestureCancelled(GestureOverlayView overlay,
 				MotionEvent event) {
 		}
+	}
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+		// Respond to the action bar's Up/Home button
+		case android.R.id.home:
+			finish();
+			return true;
+		}
+		return super.onOptionsItemSelected(item);
 	}
 
 }
