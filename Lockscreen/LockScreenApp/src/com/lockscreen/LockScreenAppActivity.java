@@ -1,5 +1,6 @@
 package com.lockscreen;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,12 +27,9 @@ import android.telephony.PhoneStateListener;
 import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.view.KeyEvent;
-import android.view.MotionEvent;
-import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageView;
-import android.widget.RelativeLayout.LayoutParams;
 import android.widget.Toast;
 
 public class LockScreenAppActivity extends Activity {
@@ -52,10 +50,10 @@ public class LockScreenAppActivity extends Activity {
 	public static final String PREF_FILE = "com.lockscreen.prefs";
 	public static final String LOCKED = "com.lockscreen.locked";
 	public static final String LAUNCHER = "com.lockscreen.launcher";
+	public static final String WHICH_GEST = "com.lockscreen.gesture";
+	public static final String THRESHOLD = "com.lockscreen.threshold";
 
 	private boolean locked = false;
-
-	private LayoutParams layoutParams;
 
 	@Override
 	public void onAttachedToWindow() {
@@ -67,7 +65,6 @@ public class LockScreenAppActivity extends Activity {
 		super.onAttachedToWindow();
 	}
 
-	@SuppressWarnings("deprecation")
 	public void onCreate(Bundle savedInstanceState) {
 
 		super.onCreate(savedInstanceState);
@@ -75,10 +72,8 @@ public class LockScreenAppActivity extends Activity {
 		getWindow().addFlags(
 				WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON
 						| WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED);
-		// | WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
 		setContentView(R.layout.lock_layout);
-		// droid = (ImageView) findViewById(R.id.droid);
 
 		final SharedPreferences settings = getSharedPreferences(PREF_FILE, 0);
 		String launcher = settings.getString(LAUNCHER, "launcher");
@@ -141,7 +136,8 @@ public class LockScreenAppActivity extends Activity {
 			telephonyManager.listen(phoneStateListener,
 					PhoneStateListener.LISTEN_CALL_STATE);
 
-			final GestureLibrary mLibrary = GestureLibraries.fromRawResource(this,R.raw.gestures);
+			final GestureLibrary mLibrary = GestureLibraries.fromRawResource(
+					this, R.raw.gestures);
 			if (!mLibrary.load()) {
 				finish();
 			}
@@ -154,134 +150,68 @@ public class LockScreenAppActivity extends Activity {
 				@Override
 				public void onGesturePerformed(GestureOverlayView overlay,
 						Gesture gesture) {
-					ArrayList<Prediction> predictions = mLibrary.recognize(gesture);
-					 
-					   if (predictions.size() > 0 && predictions.get(0).score > 1.0) {
-					     String result = predictions.get(0).name;
-					 
-					     if ("unlock".equalsIgnoreCase(result)) {
-					       Toast.makeText(overlay.getContext(), "Unlocked", Toast.LENGTH_LONG).show();
-					       
-					       lock(overlay.getContext(),false);
-					       finish();
-					     }
-					   }
-				}
-				
-			});
+					File f = new File(overlay.getContext().getExternalFilesDir(
+							null), "gestures");
 
-			/*
-			 * windowwidth = getWindowManager().getDefaultDisplay().getWidth();
-			 * System.out.println("windowwidth" + windowwidth); windowheight =
-			 * getWindowManager().getDefaultDisplay().getHeight();
-			 * System.out.println("windowheight" + windowheight);
-			 * 
-			 * MarginLayoutParams marginParams2 = new MarginLayoutParams(
-			 * droid.getLayoutParams());
-			 * 
-			 * marginParams2.setMargins((windowwidth / 24) * 10, ((windowheight
-			 * / 32) * 8), 0, 0);
-			 * 
-			 * // marginParams2.setMargins(((windowwidth-droid.getWidth())/2),((
-			 * windowheight/32)*8),0,0); RelativeLayout.LayoutParams layoutdroid
-			 * = new RelativeLayout.LayoutParams( marginParams2);
-			 * 
-			 * droid.setLayoutParams(layoutdroid);
-			 * 
-			 * LinearLayout homelinear = (LinearLayout)
-			 * findViewById(R.id.homelinearlayout); homelinear.setPadding(0, 0,
-			 * 0, (windowheight / 32) * 3); home = (ImageView)
-			 * findViewById(R.id.home);
-			 * 
-			 * MarginLayoutParams marginParams1 = new MarginLayoutParams(
-			 * home.getLayoutParams());
-			 * 
-			 * marginParams1.setMargins((windowwidth / 24) * 10, 0,
-			 * (windowheight / 32) * 8, 0); //
-			 * marginParams1.setMargins(((windowwidth
-			 * -home.getWidth())/2),0,(windowheight/32)*10,0);
-			 * LinearLayout.LayoutParams layout = new LinearLayout.LayoutParams(
-			 * marginParams1);
-			 * 
-			 * home.setLayoutParams(layout);
-			 * 
-			 * droid.setOnTouchListener(new View.OnTouchListener() {
-			 * 
-			 * @Override public boolean onTouch(View v, MotionEvent event) { //
-			 * TODO Auto-generated method stub layoutParams = (LayoutParams)
-			 * v.getLayoutParams();
-			 * 
-			 * switch (event.getAction()) {
-			 * 
-			 * case MotionEvent.ACTION_DOWN: int[] hompos = new int[2]; // int[]
-			 * phonepos=new int[2]; droidpos = new int[2]; //
-			 * phone.getLocationOnScreen(phonepos);
-			 * home.getLocationOnScreen(hompos); home_x = hompos[0]; home_y =
-			 * hompos[1]; // phone_x=phonepos[0]; // phone_y=phonepos[1];
-			 * 
-			 * break; case MotionEvent.ACTION_MOVE: int x_cord = (int)
-			 * event.getRawX(); int y_cord = (int) event.getRawY();
-			 * 
-			 * if (x_cord > windowwidth - (windowwidth / 24)) { x_cord =
-			 * windowwidth - (windowwidth / 24) * 2; } if (y_cord > windowheight
-			 * - (windowheight / 32)) { y_cord = windowheight - (windowheight /
-			 * 32) * 2; }
-			 * 
-			 * layoutParams.leftMargin = x_cord; layoutParams.topMargin =
-			 * y_cord;
-			 * 
-			 * droid.getLocationOnScreen(droidpos);
-			 * v.setLayoutParams(layoutParams);
-			 * 
-			 * if (((x_cord - home_x) <= (windowwidth / 24) * 5 && (home_x -
-			 * x_cord) <= (windowwidth / 24) * 4) && ((home_y - y_cord) <=
-			 * (windowheight / 32) * 5)) { System.out.println("home overlapps");
-			 * lock(v.getContext(), false); System.out.println("homeee" + home_x
-			 * + "  " + (int) event.getRawX() + "  " + x_cord + " " +
-			 * droidpos[0]);
-			 * 
-			 * System.out.println("homeee" + home_y + "  " + (int)
-			 * event.getRawY() + "  " + y_cord + " " + droidpos[1]);
-			 * 
-			 * v.setVisibility(View.GONE);
-			 * 
-			 * // startActivity(new Intent(Intent.ACTION_VIEW, //
-			 * Uri.parse("content://contacts/people/"))); finish(); } else {
-			 * System.out.println("homeee" + home_x + "  " + (int)
-			 * event.getRawX() + "  " + x_cord + " " + droidpos[0]);
-			 * 
-			 * System.out.println("homeee" + home_y + "  " + (int)
-			 * event.getRawY() + "  " + y_cord + " " + droidpos[1]);
-			 * 
-			 * System.out.println("home notttt overlapps"); }
-			 * 
-			 * break; case MotionEvent.ACTION_UP:
-			 * 
-			 * int x_cord1 = (int) event.getRawX(); int y_cord2 = (int)
-			 * event.getRawY();
-			 * 
-			 * if (((x_cord1 - home_x) <= (windowwidth / 24) * 5 && (home_x -
-			 * x_cord1) <= (windowwidth / 24) * 4) && ((home_y - y_cord2) <=
-			 * (windowheight / 32) * 5)) { System.out.println("home overlapps");
-			 * System.out.println("homeee" + home_x + "  " + (int)
-			 * event.getRawX() + "  " + x_cord1 + " " + droidpos[0]);
-			 * 
-			 * System.out.println("homeee" + home_y + "  " + (int)
-			 * event.getRawY() + "  " + y_cord2 + " " + droidpos[1]);
-			 * 
-			 * // startActivity(new Intent(Intent.ACTION_VIEW, //
-			 * Uri.parse("content://contacts/people/"))); // finish(); } else {
-			 * 
-			 * layoutParams.leftMargin = (windowwidth / 24) * 10;
-			 * layoutParams.topMargin = (windowheight / 32) * 8;
-			 * v.setLayoutParams(layoutParams);
-			 * 
-			 * }
-			 * 
-			 * }
-			 * 
-			 * return true; } });
-			 */
+					String which = settings.getString(WHICH_GEST, "Unlock");
+					Log.d("com.lockscreen",
+							String.format("does it equal '%s'", which));
+
+					GestureLibrary lib = null;
+					if (f.exists()) {
+						lib = GestureLibraries.fromFile(f);
+						lib.load();
+					} else {
+						Toast.makeText(overlay.getContext(), "Unlocked",
+								Toast.LENGTH_LONG).show();
+						Log.d("com.lockscreen",
+								String.format("unlocked with no gesture"));
+						lock(overlay.getContext(), false);
+						finish();
+						return;
+					}
+
+					Log.d("com.lockscreen", "checking gesture");
+					Log.d("com.lockscreen", String.format("found %d gestures",
+							lib.getGestureEntries().size()));
+
+					ArrayList<Prediction> predictions = lib.recognize(gesture);
+					Log.d("com.lockscreen",
+							String.format("size:%d", predictions.size()));
+					Log.d("com.lockscreen",
+							String.format("threshold:%f",
+									settings.getFloat(THRESHOLD, (float) 2.0)));
+					if (predictions.size() > 0)
+						Log.d("com.lockscreen", String.format("score:%f",
+								predictions.get(0).score));
+					if (predictions.size() > 0) {
+						for (Prediction predict : predictions) {
+							String result = predict.name;
+
+							if (which.equalsIgnoreCase(result)
+									&& predict.score > settings.getFloat(
+											THRESHOLD, (float) 2.0)) {
+								Toast.makeText(overlay.getContext(),
+										"Unlocked", Toast.LENGTH_LONG).show();
+								Log.d("com.lockscreen",
+										String.format("unlocked"));
+								lock(overlay.getContext(), false);
+								finish();
+							}
+						}
+					} else if (predictions.size() <= 0) {
+						Toast.makeText(overlay.getContext(), "Unlocked",
+								Toast.LENGTH_LONG).show();
+						Log.d("com.lockscreen",
+								String.format("unlocked with no gesture"));
+						lock(overlay.getContext(), false);
+						finish();
+						return;
+
+					}
+				}
+
+			});
 
 		} catch (Exception e) {
 			// TODO: handle exception
@@ -307,33 +237,6 @@ public class LockScreenAppActivity extends Activity {
 			}
 		}
 	};
-
-	public void onSlideTouch(View view, MotionEvent event) {
-		switch (event.getAction()) {
-		case MotionEvent.ACTION_DOWN:
-			break;
-		case MotionEvent.ACTION_MOVE:
-			int x_cord = (int) event.getRawX();
-			int y_cord = (int) event.getRawY();
-
-			if (x_cord > windowwidth) {
-				x_cord = windowwidth;
-			}
-			if (y_cord > windowheight) {
-				y_cord = windowheight;
-			}
-
-			layoutParams.leftMargin = x_cord - 25;
-			layoutParams.topMargin = y_cord - 75;
-
-			view.setLayoutParams(layoutParams);
-			break;
-		default:
-			break;
-
-		}
-
-	}
 
 	@Override
 	public void onBackPressed() {

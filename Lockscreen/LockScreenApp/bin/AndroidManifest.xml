@@ -12,6 +12,7 @@
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <uses-permission android:name="android.permission.REORDER_TASKS" />
     <uses-permission android:name="android.permission.GET_TASKS" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <application
         android:allowBackup="false"
@@ -25,12 +26,10 @@
             android:theme="@android:style/Theme.Translucent" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-                
+
                 <category android:name="android.intent.category.HOME" />
                 <category android:name="android.intent.category.DEFAULT" />
-                <!--
-                
-                -->
+                <!--  -->
             </intent-filter>
         </activity>
         <activity
@@ -49,17 +48,32 @@
             </intent-filter>
         </receiver>
 
- 
         <activity
             android:name="com.lockscreen.Settings"
-            android:taskAffinity="com.lockscreen.Settings"
-            android:label="@string/title_activity_settings" >
+            android:label="@string/title_activity_settings"
+            android:taskAffinity="com.lockscreen.Settings" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        
+        <activity
+            android:name="com.lockscreen.RecordGesture"
+            android:label="@string/title_activity_record_gesture"
+            android:parentActivityName="com.lockscreen.Settings" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.lockscreen.Settings" />
+        </activity>
+        <activity
+            android:name="com.lockscreen.ConfirmGesture"
+            android:label="@string/title_activity_confirm_gesture"
+            android:parentActivityName="com.lockscreen.RecordGesture" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.lockscreen.RecordGesture" />
+        </activity>
     </application>
 
 </manifest>

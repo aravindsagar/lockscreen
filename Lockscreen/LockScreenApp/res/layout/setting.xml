@@ -8,24 +8,38 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context=".Settings" >
 
-    <TableRow
+    <TableLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content" >
 
-        <TextView
-            android:id="@+id/textView1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_alignTop="@+id/spinLauncher"
-            android:text="@string/launcher" />
-
-        <Spinner
-            android:id="@+id/spinLauncher"
+        <TableRow
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentTop="true" />
-    </TableRow>
+            android:layout_height="wrap_content" >
+
+            <TextView
+                android:id="@+id/textView1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/launcher" />
+
+            <Spinner
+                android:id="@+id/spinLauncher"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1" />
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" >
+
+            <Button
+                android:id="@+id/butRecord"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:onClick="openRecord"
+                android:text="@string/title_activity_record_gesture" />
+        </TableRow>
+    </TableLayout>
 
 </RelativeLayout>

@@ -12,5 +12,11 @@
     <string name="title_activity_settings">VC Settings</string>
     <string name="action_settings">VC Settings</string>
     <string name="hello_world">Hello world!</string>
+    <string name="confirm">Confirm</string>
+    <string name="undo">Clear</string>
+    <string name="test">Test Gesture</string>
+    <string name="threshold">Sensitivity: </string>
+    <string name="title_activity_record_gesture">Record Gesture</string>
+    <string name="title_activity_confirm_gesture">Confirm Gesture</string>
 
 </resources>
