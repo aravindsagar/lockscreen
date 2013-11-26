@@ -46,8 +46,9 @@ public final class R {
         public static final int phoneupdated1=0x7f020013;
     }
     public static final class id {
-        public static final int action_settings=0x7f0a000e;
+        public static final int action_settings=0x7f0a000f;
         public static final int butRecord=0x7f0a000c;
+        public static final int butTest=0x7f0a000d;
         public static final int confirm_gesture=0x7f0a0001;
         public static final int droid=0x7f0a0006;
         public static final int gestures=0x7f0a0005;
@@ -55,7 +56,7 @@ public final class R {
         public static final int home=0x7f0a0008;
         public static final int homelinearlayout=0x7f0a0007;
         public static final int ll_custom_lock_screen=0x7f0a0004;
-        public static final int phone=0x7f0a000d;
+        public static final int phone=0x7f0a000e;
         public static final int seekThreshold=0x7f0a0003;
         public static final int spinLauncher=0x7f0a000b;
         public static final int textView1=0x7f0a000a;
@@ -91,6 +92,7 @@ public final class R {
         public static final int title_activity_confirm_gesture=0x7f06000d;
         public static final int title_activity_record_gesture=0x7f06000c;
         public static final int title_activity_settings=0x7f060005;
+        public static final int title_activity_test_gesture=0x7f06000e;
         public static final int undo=0x7f060009;
         public static final int unloack=0x7f060002;
     }

@@ -114,7 +114,7 @@ public class ConfirmGesture extends Activity {
 			editor.commit();
 
 			Log.d("com.lockscreen", "saved gesture");
-			Toast.makeText(this, "Gesture Saved", Toast.LENGTH_LONG).show();
+			Toast.makeText(this, "Gesture Saved", Toast.LENGTH_SHORT).show();
 			finish();
 		}
 		Log.d("com.lockscreen", "no gesture");

@@ -34,19 +34,6 @@ import android.widget.Toast;
 
 public class LockScreenAppActivity extends Activity {
 
-	/** Called when the activity is first created. */
-	@SuppressWarnings("deprecation")
-	KeyguardManager.KeyguardLock k1;
-	boolean inDragMode;
-	int selectedImageViewX;
-	int selectedImageViewY;
-	int windowwidth;
-	int windowheight;
-	ImageView droid, phone, home;
-	// int phone_x,phone_y;
-	int home_x, home_y;
-	int[] droidpos;
-
 	public static final String PREF_FILE = "com.lockscreen.prefs";
 	public static final String LOCKED = "com.lockscreen.locked";
 	public static final String LAUNCHER = "com.lockscreen.launcher";

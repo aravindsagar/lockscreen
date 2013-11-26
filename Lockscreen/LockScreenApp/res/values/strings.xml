@@ -16,7 +16,8 @@
     <string name="undo">Clear</string>
     <string name="test">Test Gesture</string>
     <string name="threshold">Sensitivity: </string>
-    <string name="title_activity_record_gesture">Record Gesture</string>
-    <string name="title_activity_confirm_gesture">Confirm Gesture</string>
+    <string name="title_activity_record_gesture">Record New Gesture</string>
+    <string name="title_activity_confirm_gesture">Test and Confirm Gesture</string>
+    <string name="title_activity_test_gesture">Change Sensitivity</string>
 
 </resources>
