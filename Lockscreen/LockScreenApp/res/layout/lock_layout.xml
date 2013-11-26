@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.gesture.GestureOverlayView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/gestures"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:eventsInterceptionEnabled="true"
+    android:gestureColor="#00000000"
+    android:gestureStrokeType="multiple"
+    android:orientation="vertical"
+    android:uncertainGestureColor="#00000000" >
+
+</android.gesture.GestureOverlayView>
